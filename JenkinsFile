@@ -1,13 +1,13 @@
 pipeline {
   agent {
     docker {
-      image 'abhishekf5/maven-abhishek-docker-agent:v1' // You can change this to your own later
+      image 'kavyak/maven-kavyak-docker-agent:v1' // You can change this to your own later
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
     }
   }
 
   environment {
-    SONAR_URL = "http://34.201.116.83:9000"
+    SONAR_URL = "http://54.81.148.174:9000"
     LOCAL_IMAGE = "registration-app:v1"
     REMOTE_IMAGE = "kavyak2305/registration-app:${BUILD_NUMBER}"
   }
