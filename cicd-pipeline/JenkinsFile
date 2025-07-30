@@ -1,0 +1,57 @@
+pipeline {
+  agent {
+    docker {
+      image 'kavyak/maven-kavyak-docker-agent:v1' // You can change this to your own later
+      args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
+    }
+  }
+
+  environment {
+    SONAR_URL = "http://54.81.148.174:9000"
+    LOCAL_IMAGE = "registration-app:v1"
+    REMOTE_IMAGE = "kavyak2305/registration-app:${BUILD_NUMBER}"
+  }
+
+  stages {
+    stage('Checkout') {
+      steps {
+        checkout scm
+      }
+    }
+
+    stage('Build JAR') {
+      steps {
+        sh 'mvn clean package'
+      }
+    }
+
+    stage('SonarQube Analysis') {
+      steps {
+        withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
+          sh 'mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=$SONAR_URL'
+        }
+      }
+    }
+
+    stage('Tag and Push Docker Image') {
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'docker-cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+          sh '''
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker tag $LOCAL_IMAGE $REMOTE_IMAGE
+            docker push $REMOTE_IMAGE
+          '''
+        }
+      }
+    }
+  }
+
+  post {
+    success {
+      echo "✅ Build and push completed successfully!"
+    }
+    failure {
+      echo "❌ Build failed. Please check the logs."
+    }
+  }
+}
