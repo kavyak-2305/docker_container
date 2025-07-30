@@ -6,6 +6,11 @@ pipeline {
     }
   }
   stages {
+    stage('Clone Repo') {
+      steps {
+        git credentialsId: 'github-token', url: 'https://github.com/kavyak-2305/docker_container.git', branch: 'master'
+      }
+    }
     stage('Checkout') {
       steps {
         sh 'echo passed'
