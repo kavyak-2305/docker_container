@@ -14,7 +14,7 @@ pipeline {
       steps {
         git url: 'https://github.com/kavyak-2305/docker_container.git',
             branch: 'master',
-            credentialsId: 'github-cred'
+            credentialsId: 'github-pat'
       }
     }
 
