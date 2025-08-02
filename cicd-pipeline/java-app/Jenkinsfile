@@ -36,7 +36,7 @@ pipeline {
 
     stage('Static Code Analysis') {
       steps {
-        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_AUTH_TOKEN')]) {
+        withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
             sh '''
                 cd cicd-pipeline/java-app
                 mvn clean install
