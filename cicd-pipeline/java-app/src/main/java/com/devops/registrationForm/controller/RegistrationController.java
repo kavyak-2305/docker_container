@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/api")
 public class RegistrationController {
 
     private List<User> registeredUsers = new ArrayList<>();
