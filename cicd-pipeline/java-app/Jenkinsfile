@@ -36,12 +36,14 @@ pipeline {
 
     stage('Static Code Analysis') {
       steps {
-        withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
-          sh '''
-            docker run --rm -v $PWD:/app -w /app/cicd-pipeline/java-app \
-              kavyak2305/maven-kavya-docker-agent:v1 \
-              mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=$SONAR_URL
-          '''
+        withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_AUTH_TOKEN')]) {
+            sh '''
+                cd cicd-pipeline/java-app
+                mvn clean install
+                mvn sonar:sonar \
+                    -Dsonar.host.url=http://3.85.5.39:9000 \
+                    -Dsonar.login=$SONAR_AUTH_TOKEN
+            '''
         }
       }
     }
