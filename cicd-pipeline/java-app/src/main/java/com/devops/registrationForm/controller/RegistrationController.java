@@ -3,12 +3,12 @@ package com.devops.registrationForm.controller;
 import com.devops.registrationForm.entity.User;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping
 public class RegistrationController {
 
     private List<User> registeredUsers = new ArrayList<>();
